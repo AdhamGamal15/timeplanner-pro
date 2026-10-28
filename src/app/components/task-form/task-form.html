@@ -1,0 +1,86 @@
+<form class="card shadow-sm border-0 p-4" ngNoForm (keydown)="onKeyDown($event)" (submit)="onSubmit($event)">
+  <span class="badge bg-primary-subtle text-primary mb-2 align-self-start">New Task</span>
+  <h2 class="h4 fw-bold mb-4">Add a Task</h2>
+
+  <div class="mb-3">
+    <label for="task-title" class="form-label fw-semibold">Title</label>
+    <input
+      #titleInput
+      id="task-title"
+      type="text"
+      class="form-control"
+      [class.is-invalid]="title() && titleError()"
+      [class.is-valid]="title() && !titleError()"
+      placeholder="Finish the monthly report"
+      [ngModel]="title()"
+      (ngModelChange)="title.set($event)"
+    />
+    @if (title()) {
+      <div class="small mt-1" [class.text-danger]="titleError()" [class.text-success]="!titleError()">
+        {{ titleError() || 'Looks good!' }}
+      </div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="task-description" class="form-label fw-semibold">Description</label>
+    <textarea
+      id="task-description"
+      class="form-control"
+      rows="3"
+      placeholder="Add a few details about this task..."
+      [ngModel]="description()"
+      (ngModelChange)="description.set($event)"
+    ></textarea>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-sm-6">
+      <label for="task-date" class="form-label fw-semibold">Date</label>
+      <input
+        id="task-date"
+        type="date"
+        class="form-control"
+        [class.is-invalid]="date() && time() && dateTimeError()"
+        [class.is-valid]="date() && time() && !dateTimeError()"
+        [ngModel]="date()"
+        (ngModelChange)="date.set($event)"
+      />
+    </div>
+    <div class="col-sm-6">
+      <label for="task-time" class="form-label fw-semibold">Time</label>
+      <input
+        id="task-time"
+        type="time"
+        class="form-control"
+        [class.is-invalid]="date() && time() && dateTimeError()"
+        [class.is-valid]="date() && time() && !dateTimeError()"
+        [ngModel]="time()"
+        (ngModelChange)="time.set($event)"
+      />
+    </div>
+    @if (date() && time() && dateTimeError()) {
+      <div class="text-danger small">{{ dateTimeError() }}</div>
+    }
+  </div>
+
+  <div class="mb-4">
+    <label for="task-category" class="form-label fw-semibold">Category</label>
+    <select
+      id="task-category"
+      class="form-select"
+      [ngModel]="category()"
+      (ngModelChange)="category.set($event)"
+    >
+      @for (cat of categories; track cat) {
+        <option [value]="cat">{{ cat }}</option>
+      }
+    </select>
+  </div>
+
+  @if (submitError()) {
+    <div class="alert alert-danger py-2">{{ submitError() }}</div>
+  }
+
+  <button type="submit" class="btn btn-primary fw-semibold">Add Task</button>
+</form>

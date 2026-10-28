@@ -1,0 +1,27 @@
+<div>
+  <section class="bg-primary bg-gradient text-white py-5">
+    <div class="container text-center py-5">
+      <h1 class="display-4 fw-bold mb-3">Plan Your Time, Master Your Day</h1>
+      <p class="lead mb-4">
+        TimePlanner Pro helps you organize tasks, track deadlines, and stay on top of everything
+        that matters, all from one simple dashboard.
+      </p>
+      <a routerLink="/tasks" class="btn btn-light btn-lg fw-semibold px-4">Go to My Tasks</a>
+    </div>
+  </section>
+
+  <section class="container py-5">
+    <div class="row g-4">
+      @for (feature of features; track feature.title) {
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title fw-bold text-primary">{{ feature.title }}</h5>
+              <p class="card-text text-secondary">{{ feature.text }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</div>

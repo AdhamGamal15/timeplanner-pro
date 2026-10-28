@@ -1,0 +1,57 @@
+<div class="container py-5">
+  <app-toast-notification [message]="notification()" />
+
+  <div class="mb-5">
+    <h1 class="fw-bold text-primary mb-1">My Tasks</h1>
+    <p class="text-secondary">
+      {{ tasks().length }} task{{ tasks().length === 1 ? '' : 's' }} total
+      @if (overdueCount() > 0) {
+        <span class="text-danger fw-semibold"> &middot; {{ overdueCount() }} overdue</span>
+      }
+      &middot; window width: {{ windowWidth() }}px
+    </p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <app-task-form (taskAdded)="handleTaskAdded($event)" />
+    </div>
+
+    <div class="col-lg-8">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div class="d-flex align-items-center gap-2">
+          <label for="category-filter" class="fw-semibold mb-0">Filter:</label>
+          <select
+            id="category-filter"
+            class="form-select"
+            [ngModel]="categoryFilter()"
+            (ngModelChange)="categoryFilter.set($event)"
+          >
+            <option value="All">All categories</option>
+            @for (cat of categories; track cat) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          @for (cat of categories; track cat) {
+            <span class="badge bg-light text-dark border">
+              {{ cat }}: {{ categoryStats()[cat] || 0 }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <app-task-list
+        [tasks]="filteredTasks()"
+        [editingId]="editingId()"
+        [columns]="columns()"
+        (startEdit)="handleStartEdit($event)"
+        (cancelEdit)="handleCancelEdit()"
+        (saveEdit)="handleSaveEdit($event)"
+        (deleteTask)="handleDelete($event)"
+      />
+    </div>
+  </div>
+</div>

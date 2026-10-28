@@ -1,0 +1,109 @@
+@if (isEditing()) {
+  <div
+    class="card shadow-sm border-0 h-100"
+    [style.backgroundColor]="statusBackgrounds[status()]"
+    (keydown)="onKeyDown($event)"
+  >
+    <div class="card-body">
+      <input
+        type="text"
+        class="form-control mb-2"
+        [class.is-invalid]="editErrors().title"
+        [ngModel]="editData().title"
+        (ngModelChange)="setField('title', $event)"
+      />
+      @if (editErrors().title) {
+        <div class="text-danger small mb-2">{{ editErrors().title }}</div>
+      }
+
+      <textarea
+        class="form-control mb-2"
+        rows="2"
+        [ngModel]="editData().description"
+        (ngModelChange)="setField('description', $event)"
+      ></textarea>
+
+      <div class="d-flex gap-2 mb-2">
+        <input
+          type="date"
+          class="form-control"
+          [class.is-invalid]="editErrors().dateTime"
+          [ngModel]="editData().date"
+          (ngModelChange)="setField('date', $event)"
+        />
+        <input
+          type="time"
+          class="form-control"
+          [class.is-invalid]="editErrors().dateTime"
+          [ngModel]="editData().time"
+          (ngModelChange)="setField('time', $event)"
+        />
+      </div>
+      @if (editErrors().dateTime) {
+        <div class="text-danger small mb-2">{{ editErrors().dateTime }}</div>
+      }
+
+      <select
+        class="form-select mb-3"
+        [ngModel]="editData().category"
+        (ngModelChange)="setField('category', $event)"
+      >
+        @for (cat of categories; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary btn-sm flex-grow-1" (click)="handleSave()">
+          Save
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm flex-grow-1"
+          (click)="cancelEdit.emit()"
+        >
+          Cancel (Esc)
+        </button>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="card shadow-sm border-0 h-100" [style.backgroundColor]="statusBackgrounds[status()]">
+    <div class="card-body d-flex flex-column">
+      <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+        <h5 class="card-title fw-bold mb-0">{{ truncate(task().title) }}</h5>
+        <span class="badge" [class]="statusBadgeClasses[status()]">
+          {{ statusLabels[status()] }}
+        </span>
+      </div>
+
+      <p class="card-text text-secondary flex-grow-1">{{ truncate(task().description) }}</p>
+
+      <p class="small text-muted mb-2">{{ formattedDate() }}</p>
+
+      <span class="badge bg-primary-subtle text-primary align-self-start mb-3">
+        {{ task().category }}
+      </span>
+
+      <!-- No click handlers here: the parent list uses event delegation via data-* attributes -->
+      <div class="d-flex gap-2 mt-auto">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm flex-grow-1"
+          data-action="edit"
+          [attr.data-id]="task().id"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger btn-sm flex-grow-1"
+          data-action="delete"
+          [attr.data-id]="task().id"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+}
