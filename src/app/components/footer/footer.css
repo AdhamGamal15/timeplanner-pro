@@ -1,0 +1,87 @@
+/*
+ * Footer styles ported from the PrimeNG "Ultima" template
+ * (_footer.scss), converted to plain CSS.
+ */
+
+:host {
+  --footer-bg: #ffffff;
+  --footer-border: #e9ecef;
+  --footer-text: #212529;
+  --footer-muted: #6c757d;
+  --footer-hover: #f1f3f5;
+  --footer-accent: #283593;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  color: var(--footer-accent);
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.footer-title {
+  font-weight: 600;
+  color: var(--footer-text);
+}
+
+.footer-meta {
+  font-size: 0.8rem;
+  color: var(--footer-muted);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Rounded text icon button (PrimeNG: pButton rounded text severity="secondary" iconOnly) */
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: var(--footer-muted);
+  text-decoration: none;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.footer-social:hover,
+.footer-social:focus-visible {
+  background-color: var(--footer-hover);
+  color: var(--footer-accent);
+}
+
+@media screen and (max-width: 575px) {
+  :host {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-brand {
+    flex-direction: column;
+  }
+}
