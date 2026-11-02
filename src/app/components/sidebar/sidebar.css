@@ -1,0 +1,220 @@
+/*
+ * Sidebar styles ported from the PrimeNG "Ultima" template
+ * (_sidebar_vertical.scss, light menu theme), converted to plain CSS.
+ */
+
+:host {
+  --menu-text: #212529;
+  --menu-section: #37474f;
+  --menu-muted: #6c757d;
+  --menu-hover: #f1f3f5;
+  --menu-active-bg: #e8eaf6;
+  --menu-active-text: #283593;
+  --menu-border: #e9ecef;
+
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--sidebar-width, 18rem);
+  width: var(--sidebar-width, 18rem);
+  position: sticky;
+  top: 4rem;
+  align-self: flex-start;
+  height: calc(100vh - 4rem);
+  z-index: 1020;
+  background: #fff;
+  color: var(--menu-text);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Transitions are enabled only once the page has painted (class added from sidebar.ts) */
+:host(.animated) {
+  transition:
+    margin-left 0.25s ease,
+    visibility 0s linear 0s;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Desktop: collapsed (slides out of view) */
+:host(.collapsed) {
+  margin-left: calc(-1 * var(--sidebar-width, 18rem));
+  visibility: hidden;
+}
+
+:host(.animated.collapsed) {
+  transition:
+    margin-left 0.25s ease,
+    visibility 0s linear 0.25s;
+}
+
+.layout-menu-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.menu-section {
+  padding: 1.25rem 1.25rem 0.5rem;
+  color: var(--menu-section);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.8rem 1.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.menu-link i {
+  font-size: 1.1rem;
+}
+
+.menu-link:hover {
+  background: var(--menu-hover);
+}
+
+.menu-link.active {
+  background: var(--menu-active-bg);
+  color: var(--menu-active-text);
+  font-weight: 600;
+}
+
+.menu-link:focus-visible {
+  outline: 2px solid var(--menu-active-text);
+  outline-offset: -2px;
+}
+
+.menu-chevron {
+  margin-left: auto;
+  font-size: 0.85rem !important;
+  transition: transform 0.2s;
+}
+
+.menu-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Submenu: smooth open / close without measuring heights */
+.submenu {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.2s ease,
+    visibility 0s linear 0.2s;
+}
+
+.submenu.open {
+  grid-template-rows: 1fr;
+  /* inherit (not visible): when the sidebar is hidden, the submenu hides with it */
+  visibility: inherit;
+  transition:
+    grid-template-rows 0.2s ease,
+    visibility 0s;
+}
+
+.submenu > ul {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.menu-link.sub {
+  padding: 0.6rem 1.25rem 0.6rem 2.6rem;
+  font-size: 0.95rem;
+}
+
+.menu-count {
+  margin-left: auto;
+  min-width: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--menu-active-bg);
+  color: var(--menu-active-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
+/* Profile block pinned to the bottom */
+.menu-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--menu-border);
+}
+
+.menu-avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #3f51b5;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.menu-profile-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.menu-profile-text small {
+  color: var(--menu-muted);
+}
+
+/* Mobile: overlay that slides in from the left */
+@media screen and (max-width: 991px) {
+  :host {
+    position: fixed;
+    top: 4rem;
+    bottom: 0;
+    left: 0;
+    width: min(var(--sidebar-width, 18rem), 85vw);
+    height: auto;
+    flex: none;
+    align-self: stretch;
+    transform: translateX(-100%);
+    visibility: hidden;
+  }
+
+  :host(.animated) {
+    transition:
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
+  }
+
+  :host(.mobile-open) {
+    transform: none;
+    visibility: visible;
+  }
+
+  :host(.animated.mobile-open) {
+    transition:
+      transform 0.25s ease,
+      visibility 0s;
+  }
+}
