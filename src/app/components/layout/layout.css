@@ -1,0 +1,41 @@
+.layout-body {
+  display: flex;
+  flex: 1 1 auto;
+  /* clip (not hidden) keeps the sticky sidebar working while it slides out */
+  overflow-x: clip;
+}
+
+.layout-main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.layout-content {
+  flex: 1 0 auto;
+}
+
+.layout-mask {
+  display: none;
+}
+
+@media screen and (max-width: 991px) {
+  .layout-mask {
+    display: block;
+    position: fixed;
+    inset: 4rem 0 0 0;
+    z-index: 1015;
+    background: rgba(0, 0, 0, 0.4);
+    animation: mask-in 0.2s ease;
+  }
+}
+
+@keyframes mask-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,204 @@
+<div class="layout-topbar-start">
+  <button
+    type="button"
+    class="layout-sidebar-toggle"
+    aria-label="Toggle sidebar"
+    [attr.aria-expanded]="layout.sidebarVisible()"
+    (click)="toggleSidebar()"
+  >
+    <i class="pi pi-bars toggle-bars"></i>
+    <i
+      class="pi toggle-chevron"
+      [class.pi-chevron-left]="layout.sidebarVisible()"
+      [class.pi-chevron-right]="!layout.sidebarVisible()"
+    ></i>
+  </button>
+
+  <a class="layout-topbar-logo" routerLink="/" aria-label="TimePlanner Pro home" (click)="closeAll()">
+    <i class="pi pi-calendar-clock"></i>
+    <span>TimePlanner Pro</span>
+  </a>
+
+  <button
+    type="button"
+    class="layout-topbar-mobile-button"
+    aria-label="Toggle menu"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    (click)="toggleMobileMenu()"
+  >
+    <i class="pi pi-ellipsis-v"></i>
+  </button>
+</div>
+
+<div class="layout-topbar-end">
+  <div class="layout-topbar-actions-end">
+    <ul class="layout-topbar-items">
+      <!-- Search -->
+      <li class="layout-topbar-search">
+        <button type="button" aria-label="Search tasks" (click)="openSearch()">
+          <i class="pi pi-search"></i>
+        </button>
+
+        @if (searchOpen()) {
+          <div class="layout-search-panel px-scalein">
+            <i class="pi pi-search"></i>
+            <input
+              #searchInput
+              type="text"
+              placeholder="Search tasks"
+              aria-label="Search tasks"
+              (keydown.enter)="submitSearch(searchInput.value)"
+            />
+            <button type="button" class="layout-search-close" aria-label="Close search" (click)="closeSearch()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        }
+      </li>
+
+      <!-- Reminders (overdue and due-today tasks) -->
+      <li>
+        <button
+          type="button"
+          aria-label="Task reminders"
+          aria-haspopup="true"
+          [attr.aria-expanded]="openPanel() === 'notifications'"
+          (click)="togglePanel('notifications')"
+        >
+          <i class="pi pi-bell"></i>
+          @if (reminders().length > 0) {
+            <span class="topbar-badge">{{ reminders().length }}</span>
+          }
+        </button>
+
+        @if (openPanel() === 'notifications') {
+          <div class="layout-topbar-panel px-scalein">
+            <ul class="panel-list">
+              <li class="panel-title">
+                @if (reminders().length > 0) {
+                  <span>
+                    You have <b>{{ reminders().length }}</b> task reminder{{
+                      reminders().length === 1 ? '' : 's'
+                    }}
+                  </span>
+                } @else {
+                  <span>You're all caught up!</span>
+                }
+              </li>
+
+              @for (item of visibleReminders(); track item.task.id) {
+                <li>
+                  <a class="notification" routerLink="/tasks" (click)="closeAll()">
+                    <span class="notification-icon" [class.overdue]="item.status === 'overdue'">
+                      <i
+                        class="pi"
+                        [class.pi-exclamation-circle]="item.status === 'overdue'"
+                        [class.pi-clock]="item.status !== 'overdue'"
+                      ></i>
+                    </span>
+                    <span class="notification-body">
+                      <span class="notification-head">
+                        <b>{{ item.task.title }}</b>
+                        <small>{{ statusLabels[item.status] }}</small>
+                      </span>
+                      <span class="notification-text">
+                        {{ item.task.getFormattedDate() }} &middot; {{ item.task.category }}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              }
+
+              @if (hiddenReminderCount() > 0) {
+                <li class="panel-footer">
+                  <a routerLink="/tasks" (click)="closeAll()">
+                    +{{ hiddenReminderCount() }} more in My Tasks
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </li>
+
+      <!-- Browse by category -->
+      <li>
+        <button
+          type="button"
+          aria-label="Browse by category"
+          aria-haspopup="true"
+          [attr.aria-expanded]="openPanel() === 'categories'"
+          (click)="togglePanel('categories')"
+        >
+          <i class="pi pi-table"></i>
+        </button>
+
+        @if (openPanel() === 'categories') {
+          <div class="layout-topbar-panel px-scalein">
+            <div class="category-grid">
+              @for (cat of categories(); track cat.name) {
+                <a
+                  class="category-item"
+                  routerLink="/tasks"
+                  [queryParams]="{ category: cat.name }"
+                  (click)="closeAll()"
+                >
+                  <span class="category-button" [attr.data-color]="cat.color">
+                    <i class="pi" [class]="cat.icon"></i>
+                  </span>
+                  <span>{{ cat.name }}</span>
+                  <small>{{ cat.count }} task{{ cat.count === 1 ? '' : 's' }}</small>
+                </a>
+              }
+              <a class="category-item" routerLink="/tasks" (click)="closeAll()">
+                <span class="category-button" data-color="dark"><i class="pi pi-list"></i></span>
+                <span>All Tasks</span>
+                <small>{{ totalTasks() }} task{{ totalTasks() === 1 ? '' : 's' }}</small>
+              </a>
+              <a class="category-item" routerLink="/about" (click)="closeAll()">
+                <span class="category-button" data-color="cyan"><i class="pi pi-info-circle"></i></span>
+                <span>About</span>
+                <small>App info</small>
+              </a>
+            </div>
+          </div>
+        }
+      </li>
+
+      <!-- Profile -->
+      <li>
+        <button
+          type="button"
+          class="topbar-avatar"
+          aria-label="Profile menu"
+          aria-haspopup="true"
+          [attr.aria-expanded]="openPanel() === 'profile'"
+          (click)="togglePanel('profile')"
+        >
+          <span>TP</span>
+        </button>
+
+        @if (openPanel() === 'profile') {
+          <div class="layout-topbar-panel px-scalein">
+            <ul class="panel-list">
+              <li class="panel-title profile-header">
+                <b>TimePlanner Pro</b>
+                <small>Your tasks are saved in this browser</small>
+              </li>
+              <li>
+                <a class="panel-link" routerLink="/tasks" (click)="closeAll()">
+                  <i class="pi pi-list"></i><span>My Tasks</span>
+                </a>
+              </li>
+              <li>
+                <a class="panel-link" routerLink="/about" (click)="closeAll()">
+                  <i class="pi pi-info-circle"></i><span>About TimePlanner Pro</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        }
+      </li>
+    </ul>
+  </div>
+</div>
