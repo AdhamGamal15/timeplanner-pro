@@ -1,0 +1,80 @@
+<nav class="layout-menu-container">
+  <ul class="layout-menu">
+    <li class="menu-section">Main</li>
+    <li>
+      <a class="menu-link" routerLink="/" [class.active]="path() === '/'">
+        <i class="pi pi-home"></i><span>Home</span>
+      </a>
+    </li>
+    <li>
+      <button
+        type="button"
+        class="menu-link"
+        [class.active]="path() === '/tasks'"
+        [attr.aria-expanded]="tasksOpen()"
+        aria-controls="tasks-submenu"
+        (click)="toggleTasks()"
+      >
+        <i class="pi pi-list"></i><span>Tasks</span>
+        <i class="pi pi-chevron-down menu-chevron" [class.rotated]="tasksOpen()"></i>
+      </button>
+      <div id="tasks-submenu" class="submenu" [class.open]="tasksOpen()">
+        <ul>
+          <li>
+            <a
+              class="menu-link sub"
+              routerLink="/tasks"
+              [class.active]="path() === '/tasks' && !activeCategory()"
+            >
+              <i class="pi pi-inbox"></i><span>All Tasks</span>
+              <span class="menu-count">{{ totalTasks() }}</span>
+            </a>
+          </li>
+          @for (cat of categories(); track cat.name) {
+            <li>
+              <a
+                class="menu-link sub"
+                routerLink="/tasks"
+                [queryParams]="{ category: cat.name }"
+                [class.active]="path() === '/tasks' && activeCategory() === cat.name"
+              >
+                <i class="pi pi-tag"></i><span>{{ cat.name }}</span>
+                <span class="menu-count">{{ cat.count }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </li>
+
+    <li class="menu-section">Support</li>
+    <li>
+      <a class="menu-link" routerLink="/about" [class.active]="path() === '/about'">
+        <i class="pi pi-info-circle"></i><span>About</span>
+      </a>
+    </li>
+    <li>
+      <a class="menu-link" routerLink="/help" [class.active]="path() === '/help'">
+        <i class="pi pi-question-circle"></i><span>Help</span>
+      </a>
+    </li>
+    <li>
+      <a class="menu-link" routerLink="/contact" [class.active]="path() === '/contact'">
+        <i class="pi pi-phone"></i><span>Contact Us</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="menu-profile">
+  <span class="menu-avatar" aria-hidden="true">TP</span>
+  <div class="menu-profile-text">
+    <b>My Planner</b>
+    <small>
+      {{ totalTasks() }} task{{ totalTasks() === 1 ? '' : 's' }}
+      @if (overdueTasks() > 0) {
+        &middot; {{ overdueTasks() }} overdue
+      }
+    </small>
+  </div>
+</div>
