@@ -1,0 +1,45 @@
+<section class="help-hero">
+  <div class="container text-center">
+    <h1 class="fw-bold mb-2">How can we help you?</h1>
+    <p class="mb-4">Search the questions below or get in touch.</p>
+    <div class="help-search">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        placeholder="Search help"
+        aria-label="Search help"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+      />
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="faq-list mx-auto">
+    @for (item of filtered(); track item.question) {
+      <div class="card border-0 shadow-sm mb-3">
+        <button
+          type="button"
+          class="faq-question"
+          [attr.aria-expanded]="openQuestion() === item.question"
+          (click)="toggle(item.question)"
+        >
+          <span>{{ item.question }}</span>
+          <i class="pi" [class.pi-minus]="openQuestion() === item.question" [class.pi-plus]="openQuestion() !== item.question"></i>
+        </button>
+        @if (openQuestion() === item.question) {
+          <p class="faq-answer">{{ item.answer }}</p>
+        }
+      </div>
+    } @empty {
+      <p class="text-center text-secondary">No answers match &ldquo;{{ query() }}&rdquo;.</p>
+    }
+
+    <div class="card border-0 shadow-sm text-center p-4 mt-4">
+      <h2 class="h5 fw-bold">Still need help?</h2>
+      <p class="text-secondary">Send us a message and we will get back to you.</p>
+      <div><a routerLink="/contact" class="btn btn-primary px-4">Contact Us</a></div>
+    </div>
+  </div>
+</section>

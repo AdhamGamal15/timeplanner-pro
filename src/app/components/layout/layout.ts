@@ -9,6 +9,7 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { LayoutService } from '../../services/layout.service';
+import { Breadcrumb } from '../breadcrumb/breadcrumb';
 import { Navbar } from '../navbar/navbar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Footer } from '../footer/footer';
@@ -18,7 +19,7 @@ const LAZY_PAGES = ['/about', '/help', '/contact'];
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, Navbar, Sidebar, Footer],
+  imports: [RouterOutlet, Navbar, Sidebar, Breadcrumb, Footer],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
