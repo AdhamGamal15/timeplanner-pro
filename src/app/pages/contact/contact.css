@@ -1,0 +1,11 @@
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #e8eaf6;
+  color: #3f51b5;
+  font-size: 1.25rem;
+}

@@ -1,0 +1,87 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <h1 class="fw-bold text-primary mb-1">Contact Us</h1>
+    <p class="text-secondary mb-0">Questions, feedback or ideas? Send us a message.</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <form class="card border-0 shadow-sm p-4" ngNoForm novalidate (submit)="onSubmit($event)">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="contact-name" class="form-label fw-semibold">Name</label>
+            <input
+              id="contact-name"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="submitted() && errors().name"
+              [ngModel]="name()"
+              (ngModelChange)="name.set($event)"
+            />
+            @if (submitted() && errors().name) {
+              <div class="text-danger small mt-1">{{ errors().name }}</div>
+            }
+          </div>
+          <div class="col-sm-6">
+            <label for="contact-email" class="form-label fw-semibold">Email</label>
+            <input
+              id="contact-email"
+              type="email"
+              class="form-control"
+              [class.is-invalid]="submitted() && errors().email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+            />
+            @if (submitted() && errors().email) {
+              <div class="text-danger small mt-1">{{ errors().email }}</div>
+            }
+          </div>
+          <div class="col-12">
+            <label for="contact-subject" class="form-label fw-semibold">Subject</label>
+            <input
+              id="contact-subject"
+              type="text"
+              class="form-control"
+              [ngModel]="subject()"
+              (ngModelChange)="subject.set($event)"
+            />
+          </div>
+          <div class="col-12">
+            <label for="contact-message" class="form-label fw-semibold">Message</label>
+            <textarea
+              id="contact-message"
+              rows="5"
+              class="form-control"
+              [class.is-invalid]="submitted() && errors().message"
+              [ngModel]="message()"
+              (ngModelChange)="message.set($event)"
+            ></textarea>
+            @if (submitted() && errors().message) {
+              <div class="text-danger small mt-1">{{ errors().message }}</div>
+            }
+          </div>
+        </div>
+
+        @if (sent()) {
+          <div class="alert alert-success mt-3 mb-0" role="status">
+            Your email app should open with the message ready to send. If nothing happens, write
+            to us directly at <b>{{ contactEmail }}</b>.
+          </div>
+        }
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary px-4 fw-semibold">Send Message</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm p-4 h-100">
+        <span class="info-icon"><i class="pi pi-envelope"></i></span>
+        <h2 class="h5 fw-bold mt-3">Prefer email?</h2>
+        <p class="text-secondary mb-2">You can also write to us directly:</p>
+        <a [href]="'mailto:' + contactEmail" class="fw-semibold">{{ contactEmail }}</a>
+      </div>
+    </div>
+  </div>
+</div>

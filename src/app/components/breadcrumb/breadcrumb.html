@@ -1,0 +1,20 @@
+<nav aria-label="Breadcrumb">
+  <ol class="crumbs">
+    <li>
+      <a routerLink="/" aria-label="Home"><i class="pi pi-home"></i></a>
+    </li>
+    @for (crumb of crumbs(); track $index; let last = $last) {
+      <li>
+        <i class="pi pi-angle-right separator"></i>
+        <span [class.current]="last" [attr.aria-current]="last ? 'page' : null">{{ crumb }}</span>
+      </li>
+    }
+  </ol>
+</nav>
+
+<div class="breadcrumb-actions">
+  <a routerLink="/tasks" title="Add a task" aria-label="Add a task"><i class="pi pi-plus"></i></a>
+  <button type="button" title="Export tasks (JSON)" aria-label="Export tasks" (click)="exportTasks()">
+    <i class="pi pi-download"></i>
+  </button>
+</div>
