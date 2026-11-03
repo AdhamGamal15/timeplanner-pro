@@ -7,9 +7,15 @@ const TASK_SEPARATOR = ';';
 export function saveTasks(tasks: Task[]): void {
   const serialized = tasks
     .map((task) =>
-      [task.id, task.title, task.description, task.date, task.time, task.category].join(
-        FIELD_SEPARATOR,
-      ),
+      [
+        task.id,
+        task.title,
+        task.description,
+        task.date,
+        task.time,
+        task.category,
+        String(task.done),
+      ].join(FIELD_SEPARATOR),
     )
     .join(TASK_SEPARATOR);
 
@@ -24,7 +30,8 @@ export function loadTasks(): Task[] {
     .split(TASK_SEPARATOR)
     .filter((entry) => entry.length > 0)
     .map((entry) => {
-      const [id, title, description, date, time, category] = entry.split(FIELD_SEPARATOR);
-      return new Task(id, title, description, date, time, category);
+      // `done` is the 7th field; tasks saved before it existed only have 6, so they load as not done.
+      const [id, title, description, date, time, category, done] = entry.split(FIELD_SEPARATOR);
+      return new Task(id, title, description, date, time, category, done === 'true');
     });
 }

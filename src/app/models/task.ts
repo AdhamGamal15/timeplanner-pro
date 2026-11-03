@@ -18,6 +18,8 @@ export class Task implements TaskFields {
     public date: string,
     public time: string,
     public category: string,
+    /** Whether the task has been completed (older saved tasks default to false). */
+    public done = false,
   ) {}
 
   getFormattedDate(): string {

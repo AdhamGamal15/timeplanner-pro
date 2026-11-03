@@ -34,10 +34,20 @@ export class TaskService {
     this.tasks.update((prev) =>
       prev.map((t) => {
         if (String(t.id) !== String(id)) return t;
-        const updated = new Task(t.id, t.title, t.description, t.date, t.time, t.category);
+        const updated = new Task(t.id, t.title, t.description, t.date, t.time, t.category, t.done);
         Object.assign(updated, fields);
         return updated;
       }),
+    );
+  }
+
+  toggleDone(id: string): void {
+    this.tasks.update((prev) =>
+      prev.map((t) =>
+        String(t.id) === String(id)
+          ? new Task(t.id, t.title, t.description, t.date, t.time, t.category, !t.done)
+          : t,
+      ),
     );
   }
 }

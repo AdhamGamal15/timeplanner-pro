@@ -62,7 +62,15 @@ export class TaskCard {
   protected readonly status = computed(() => getTaskStatus(this.task()));
   protected readonly formattedDate = computed(() => {
     const t = this.task();
-    return new Task(t.id, t.title, t.description, t.date, t.time, t.category).getFormattedDate();
+    return new Task(
+      t.id,
+      t.title,
+      t.description,
+      t.date,
+      t.time,
+      t.category,
+      t.done,
+    ).getFormattedDate();
   });
 
   constructor() {
@@ -91,7 +99,10 @@ export class TaskCard {
   protected handleSave(): void {
     const data = this.editData();
     const titleErr = validateTitle(data.title);
-    const dateTimeErr = validateDateTime(data.date, data.time);
+    // A finished task is allowed to keep its (past) date and time when only other fields change.
+    const t = this.task();
+    const keepsDateTime = t.done && data.date === t.date && data.time === t.time;
+    const dateTimeErr = keepsDateTime ? '' : validateDateTime(data.date, data.time);
 
     if (titleErr || dateTimeErr) {
       this.editErrors.set({ title: titleErr, dateTime: dateTimeErr });

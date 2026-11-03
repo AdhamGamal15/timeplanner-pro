@@ -6,8 +6,11 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Task, TaskFields } from '../../models/task';
+import { LayoutService } from '../../services/layout.service';
 import { TaskService } from '../../services/task.service';
 import { CATEGORIES } from '../../utils/constants';
 import { getTaskStatus } from '../../utils/task-status';
@@ -24,12 +27,21 @@ import { ToastNotification } from '../../components/toast-notification/toast-not
 })
 export class Tasks {
   private readonly taskService = inject(TaskService);
+  private readonly router = inject(Router);
+  private readonly layout = inject(LayoutService);
+  private readonly queryParams = toSignal(inject(ActivatedRoute).queryParamMap);
 
   protected readonly categories = CATEGORIES;
   protected readonly tasks = this.taskService.tasks;
 
   protected readonly editingId = signal<string | null>(null);
-  protected readonly categoryFilter = signal('All');
+  // The category filter and search text live in the URL (?category=Work&q=report),
+  // so the top bar can link straight to a filtered list.
+  protected readonly categoryFilter = computed(() => {
+    const category = this.queryParams()?.get('category') ?? 'All';
+    return this.categories.includes(category) ? category : 'All';
+  });
+  protected readonly searchQuery = computed(() => this.queryParams()?.get('q')?.trim() ?? '');
   protected readonly notification = signal('');
   protected readonly windowWidth = signal(window.innerWidth);
 
@@ -39,7 +51,15 @@ export class Tasks {
   // Derived data (the React version used .filter() / .reduce() inline)
   protected readonly filteredTasks = computed(() => {
     const filter = this.categoryFilter();
-    return filter === 'All' ? this.tasks() : this.tasks().filter((t) => t.category === filter);
+    const query = this.searchQuery().toLowerCase();
+
+    return this.tasks().filter(
+      (t) =>
+        (filter === 'All' || t.category === filter) &&
+        (!query ||
+          t.title.toLowerCase().includes(query) ||
+          t.description.toLowerCase().includes(query)),
+    );
   });
 
   protected readonly categoryStats = computed(() =>
@@ -49,13 +69,16 @@ export class Tasks {
     }, {}),
   );
 
+  protected readonly doneCount = computed(() => this.tasks().filter((t) => t.done).length);
+
   protected readonly overdueCount = computed(
     () => this.tasks().filter((t) => getTaskStatus(t) === 'overdue').length,
   );
 
   protected readonly columns = computed(() => {
-    const width = this.windowWidth();
-    return width >= 992 ? 3 : width >= 576 ? 2 : 1;
+    // Width left for the page once the sidebar (if open) has taken its share.
+    const width = this.windowWidth() - this.layout.sidebarOffset();
+    return width >= 1250 ? 3 : width >= 576 ? 2 : 1;
   });
 
   constructor() {
@@ -66,6 +89,17 @@ export class Tasks {
       clearInterval(reminderInterval);
       clearTimeout(this.notificationTimeout);
     });
+  }
+
+  protected onCategoryChange(category: string): void {
+    this.router.navigate([], {
+      queryParams: { category: category === 'All' ? null : category },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  protected clearSearch(): void {
+    this.router.navigate([], { queryParams: { q: null }, queryParamsHandling: 'merge' });
   }
 
   protected onResize(): void {
@@ -81,7 +115,10 @@ export class Tasks {
 
     this.tasks().forEach((task) => {
       const isDueNow =
-        task.date === nowDate && task.time === nowMinutes && !this.alertedTaskIds.has(task.id);
+        !task.done &&
+        task.date === nowDate &&
+        task.time === nowMinutes &&
+        !this.alertedTaskIds.has(task.id);
 
       if (isDueNow) {
         this.alertedTaskIds.add(task.id);
@@ -110,6 +147,18 @@ export class Tasks {
 
     this.taskService.remove(id);
     if (this.editingId() === id) this.editingId.set(null);
+  }
+
+  protected handleToggle(id: string): void {
+    const target = this.tasks().find((t) => String(t.id) === String(id));
+    if (!target) return;
+
+    this.taskService.toggleDone(id);
+    this.showNotification(
+      target.done
+        ? `"${target.title}" is back on your list.`
+        : `"${target.title}" marked as done. Nice work!`,
+    );
   }
 
   protected handleStartEdit(id: string): void {
