@@ -52,6 +52,11 @@
         <span class="menu-count">{{ historyCount() }}</span>
       </a>
     </li>
+    <li>
+      <a class="menu-link" routerLink="/insights" [class.active]="path() === '/insights'">
+        <i class="pi pi-chart-bar"></i><span>Insights</span>
+      </a>
+    </li>
 
     <li class="menu-section">Support</li>
     <li>

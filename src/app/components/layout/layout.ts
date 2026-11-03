@@ -14,7 +14,7 @@ import { Navbar } from '../navbar/navbar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Footer } from '../footer/footer';
 
-const LAZY_PAGES = ['/history', '/about', '/help', '/contact'];
+const LAZY_PAGES = ['/insights', '/history', '/about', '/help', '/contact'];
 
 @Component({
   selector: 'app-layout',

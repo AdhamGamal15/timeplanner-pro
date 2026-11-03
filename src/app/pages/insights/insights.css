@@ -1,0 +1,161 @@
+/* Styles ported from the Ultima analytics dashboard (Tailwind utilities -> plain CSS). */
+
+.bg-indigo { background: #3f51b5; }
+.bg-green { background: #4caf50; }
+.bg-red { background: #f44336; }
+.bg-orange { background: #ff9800; }
+.text-green { color: #43a047; }
+.text-orange { color: #fb8c00; }
+
+/* Summary cards */
+.insight-stat {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.insight-stat-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.insight-stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.insight-stat-label {
+  display: block;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+/* Chart cards */
+.insight-card {
+  height: 100%;
+  padding: 1.25rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.insight-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.insight-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.insight-card-subtitle {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.insight-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.insight-controls select {
+  width: auto;
+}
+
+/* Blue text link used by Ultima for "Vertical/Stacked Data" and "Semi/Full Data" */
+.insight-toggle {
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #1e88e5;
+  font-weight: 500;
+}
+
+.insight-toggle:hover {
+  background: rgba(30, 136, 229, 0.08);
+}
+
+.insight-chart {
+  position: relative;
+}
+
+.insight-chart-bar {
+  height: 22rem;
+}
+
+.insight-chart-donut {
+  height: 12rem;
+  margin-bottom: 1rem;
+}
+
+.insight-chart-donut.full {
+  height: 17rem;
+}
+
+.insight-chart-empty {
+  padding: 3rem 0;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* Best / worst day rows */
+.insight-day {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.insight-day-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.insight-day-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.insight-day-text small {
+  color: #6c757d;
+}
+
+.insight-day-count {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.insights-empty-icon {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  opacity: 0.5;
+}

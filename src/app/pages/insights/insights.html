@@ -1,0 +1,154 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <h1 class="fw-bold text-primary mb-1">Insights</h1>
+    <p class="text-secondary mb-0">See how your tasks are spread over the year and the week.</p>
+  </div>
+
+  @if (summary().total === 0) {
+    <div class="text-center py-5 text-secondary">
+      <i class="pi pi-chart-bar insights-empty-icon"></i>
+      <p class="fs-5 mb-1">No data to show yet.</p>
+      <p class="mb-3">Add a few tasks and your charts will appear here.</p>
+      <a routerLink="/tasks" class="btn btn-primary">Go to My Tasks</a>
+    </div>
+  } @else {
+    <!-- Summary cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="insight-stat">
+          <span class="insight-stat-icon bg-indigo"><i class="pi pi-list-check"></i></span>
+          <div>
+            <span class="insight-stat-value">{{ summary().total }}</span>
+            <span class="insight-stat-label">Total tasks</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="insight-stat">
+          <span class="insight-stat-icon bg-green"><i class="pi pi-check-circle"></i></span>
+          <div>
+            <span class="insight-stat-value">{{ summary().done }}</span>
+            <span class="insight-stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="insight-stat">
+          <span class="insight-stat-icon bg-red"><i class="pi pi-exclamation-circle"></i></span>
+          <div>
+            <span class="insight-stat-value">{{ summary().missed }}</span>
+            <span class="insight-stat-label">Missed</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="insight-stat">
+          <span class="insight-stat-icon bg-orange"><i class="pi pi-calendar"></i></span>
+          <div>
+            <span class="insight-stat-value">{{ summary().dueToday }}</span>
+            <span class="insight-stat-label">Due today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Monthly Comparison -->
+      <div class="col-xl-8">
+        <section class="insight-card">
+          <header class="insight-card-header">
+            <h2 class="insight-card-title">Monthly Comparison</h2>
+            <div class="insight-controls">
+              <select
+                class="form-select form-select-sm"
+                aria-label="Year"
+                [ngModel]="year()"
+                (ngModelChange)="year.set(+$event)"
+              >
+                @for (y of years(); track y) {
+                  <option [ngValue]="y">{{ y }}</option>
+                }
+              </select>
+              <button
+                type="button"
+                class="insight-toggle"
+                [attr.aria-pressed]="stacked()"
+                (click)="stacked.set(!stacked())"
+              >
+                {{ stacked() ? 'Stacked' : 'Grouped' }} data
+              </button>
+            </div>
+          </header>
+
+          @if (yearTaskCount() === 0) {
+            <p class="insight-chart-empty">No tasks in {{ year() }}.</p>
+          } @else {
+            <div class="insight-chart insight-chart-bar">
+              <app-chart
+                type="bar"
+                [data]="monthlyData()"
+                [options]="monthlyOptions()"
+                [label]="'Tasks per month in ' + year() + ', by category'"
+              />
+            </div>
+          }
+        </section>
+      </div>
+
+      <!-- Weekly insights -->
+      <div class="col-xl-4">
+        <section class="insight-card">
+          <header class="insight-card-header">
+            <div>
+              <h2 class="insight-card-title">Insights</h2>
+              <span class="insight-card-subtitle">By day of the week</span>
+            </div>
+            <button
+              type="button"
+              class="insight-toggle"
+              [attr.aria-pressed]="fullCircle()"
+              (click)="fullCircle.set(!fullCircle())"
+            >
+              {{ fullCircle() ? 'Full' : 'Semi' }} data
+            </button>
+          </header>
+
+          @if (weekTotal() === 0) {
+            <p class="insight-chart-empty">No dated tasks yet.</p>
+          } @else {
+            <div class="insight-chart insight-chart-donut" [class.full]="fullCircle()">
+              <app-chart
+                type="doughnut"
+                [data]="weekData()"
+                [options]="weekOptions()"
+                label="Tasks by day of the week"
+              />
+            </div>
+          }
+
+          <div class="insight-day">
+            <span class="insight-day-icon bg-green"><i class="pi pi-thumbs-up"></i></span>
+            <div class="insight-day-text">
+              <b>Best Day of the Week</b>
+              <small>{{ bestDay()?.name ?? 'No completed tasks yet' }}</small>
+            </div>
+            <span class="insight-day-count text-green">
+              {{ bestDay()?.count ?? '-' }}
+            </span>
+          </div>
+
+          <div class="insight-day">
+            <span class="insight-day-icon bg-orange"><i class="pi pi-thumbs-down"></i></span>
+            <div class="insight-day-text">
+              <b>Worst Day of the Week</b>
+              <small>{{ worstDay()?.name ?? 'No missed tasks' }}</small>
+            </div>
+            <span class="insight-day-count text-orange">
+              {{ worstDay()?.count ?? '-' }}
+            </span>
+          </div>
+        </section>
+      </div>
+    </div>
+  }
+</div>
