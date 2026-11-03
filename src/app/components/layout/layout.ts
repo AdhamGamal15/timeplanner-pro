@@ -14,11 +14,10 @@ import { Navbar } from '../navbar/navbar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Footer } from '../footer/footer';
 
-const LAZY_PAGES = ['/about', '/help', '/contact'];
+const LAZY_PAGES = ['/history', '/about', '/help', '/contact'];
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
   imports: [RouterOutlet, Navbar, Sidebar, Breadcrumb, Footer],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
