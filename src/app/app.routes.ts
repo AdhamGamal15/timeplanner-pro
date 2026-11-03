@@ -14,6 +14,11 @@ export const routes: Routes = [
       { path: 'tasks', component: Tasks, data: { breadcrumb: ['Tasks'] } },
       // Lazy-loaded pages: each one is split into its own bundle.
       {
+        path: 'insights',
+        loadComponent: () => import('./pages/insights/insights').then((m) => m.Insights),
+        data: { breadcrumb: ['Tasks', 'Insights'] },
+      },
+      {
         path: 'history',
         loadComponent: () => import('./pages/history/history').then((m) => m.History),
         data: { breadcrumb: ['Tasks', 'History'] },
