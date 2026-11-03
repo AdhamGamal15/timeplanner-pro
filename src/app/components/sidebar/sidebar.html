@@ -46,6 +46,12 @@
         </ul>
       </div>
     </li>
+    <li>
+      <a class="menu-link" routerLink="/history" [class.active]="path() === '/history'">
+        <i class="pi pi-history"></i><span>History</span>
+        <span class="menu-count">{{ historyCount() }}</span>
+      </a>
+    </li>
 
     <li class="menu-section">Support</li>
     <li>

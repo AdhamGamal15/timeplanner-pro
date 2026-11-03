@@ -1,0 +1,263 @@
+/* Styles ported from the Ultima "Order History" page (Tailwind utilities -> plain CSS). */
+
+.history-search {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+  color: #6c757d;
+}
+
+.history-search input {
+  flex: 1;
+  height: 2.6rem;
+  border: 0;
+  background: transparent;
+  color: #212529;
+}
+
+.history-search input:focus {
+  outline: 0;
+}
+
+.history-search:focus-within {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 0.2rem rgba(63, 81, 181, 0.15);
+}
+
+.history-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.history-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 999px;
+  background: #fff;
+  color: #495057;
+  font-weight: 500;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.history-chip:hover {
+  border-color: #3f51b5;
+  color: #283593;
+}
+
+.history-chip.active {
+  border-color: #3f51b5;
+  background: #3f51b5;
+  color: #fff;
+}
+
+.history-chip-count {
+  min-width: 1.4rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.75rem;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
+.history-chip.active .history-chip-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* One card per task */
+.history-card {
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.history-strip {
+  display: flex;
+  flex-wrap: wrap;
+  background: #f1f3f5;
+}
+
+.history-strip-cell {
+  display: flex;
+  flex: 1 1 10rem;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1.25rem;
+}
+
+.history-strip-cell + .history-strip-cell {
+  border-left: 1px solid #dee2e6;
+}
+
+.history-label {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.history-value {
+  color: #212529;
+  font-weight: 500;
+}
+
+.history-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 1.25rem;
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  flex: 1 1 18rem;
+}
+
+.history-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.history-description {
+  margin: 0 0 1rem;
+  color: #6c757d;
+  overflow-wrap: anywhere;
+}
+
+.history-again {
+  padding: 0.45rem 1rem;
+  border: 1px solid #3f51b5;
+  border-radius: 6px;
+  background: transparent;
+  color: #3f51b5;
+  font-weight: 500;
+  transition: background-color 0.15s;
+}
+
+.history-again:hover {
+  background: rgba(63, 81, 181, 0.08);
+}
+
+/* Status pill (the green "Delivered" pill in Ultima) */
+.history-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem 0.5rem 0.5rem;
+  border-radius: 2.5rem;
+  font-weight: 500;
+}
+
+.history-pill.done {
+  background: rgba(76, 175, 80, 0.1);
+  color: #43a047;
+}
+
+.history-pill.missed {
+  background: rgba(244, 67, 54, 0.1);
+  color: #e53935;
+}
+
+.history-pill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.history-pill.done .history-pill-icon {
+  background: #4caf50;
+}
+
+.history-pill.missed .history-pill-icon {
+  background: #f44336;
+}
+
+/* Action bar at the bottom of each card */
+.history-actions {
+  display: flex;
+  border-top: 1px solid #dee2e6;
+}
+
+.history-actions button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: #3f51b5;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.history-actions button + button {
+  border-left: 1px solid #dee2e6;
+}
+
+.history-actions button:hover {
+  background: #3f51b5;
+  color: #fff;
+}
+
+.history-actions button.danger {
+  color: #e53935;
+}
+
+.history-actions button.danger:hover {
+  background: #e53935;
+  color: #fff;
+}
+
+.history-empty-icon {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 575px) {
+  .history-strip-cell {
+    flex-basis: 100%;
+  }
+
+  .history-strip-cell + .history-strip-cell {
+    border-left: 0;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .history-body {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .history-info {
+    align-items: center;
+  }
+}

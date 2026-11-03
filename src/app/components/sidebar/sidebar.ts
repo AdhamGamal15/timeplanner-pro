@@ -50,6 +50,10 @@ export class Sidebar {
   protected readonly tasksOpen = signal(this.router.url.startsWith('/tasks'));
 
   protected readonly totalTasks = computed(() => this.taskService.tasks().length);
+  /** Tasks that are finished or whose time passed: what the History page lists. */
+  protected readonly historyCount = computed(
+    () => this.taskService.tasks().filter((t) => t.done || getTaskStatus(t) === 'overdue').length,
+  );
   protected readonly overdueTasks = computed(
     () => this.taskService.tasks().filter((t) => getTaskStatus(t) === 'overdue').length,
   );
