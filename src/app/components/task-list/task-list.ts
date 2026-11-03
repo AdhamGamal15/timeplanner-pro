@@ -12,13 +12,16 @@ export class TaskList {
   readonly tasks = input.required<Task[]>();
   readonly editingId = input<string | null>(null);
   readonly columns = input(1);
+  /** Overrides the default empty-state message when not empty. */
+  readonly emptyText = input('');
 
   readonly startEdit = output<string>();
   readonly cancelEdit = output<void>();
   readonly saveEdit = output<{ id: string; fields: TaskFields }>();
   readonly deleteTask = output<string>();
+  readonly toggleTask = output<string>();
 
-  /** Event delegation: one click listener on the container handles every Edit/Delete button. */
+  /** Event delegation: one click listener on the container handles every Edit/Delete/Done button. */
   protected onContainerClick(event: MouseEvent): void {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-action]');
     if (!button) return;
@@ -30,6 +33,8 @@ export class TaskList {
       this.deleteTask.emit(id);
     } else if (action === 'edit') {
       this.startEdit.emit(id);
+    } else if (action === 'toggle') {
+      this.toggleTask.emit(id);
     }
   }
 }

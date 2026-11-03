@@ -71,7 +71,7 @@ export class Navbar {
     return this.taskService
       .tasks()
       .map((task) => ({ task, status: getTaskStatus(task) }))
-      .filter((r) => r.status !== 'upcoming')
+      .filter((r) => r.status === 'overdue' || r.status === 'due-today')
       .sort((a, b) =>
         `${a.task.date}T${a.task.time}`.localeCompare(`${b.task.date}T${b.task.time}`),
       );
